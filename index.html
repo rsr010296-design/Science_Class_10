@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 10 Science — Study Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #04060f;
+  --bg2:      #070d1a;
+  --card:     #0a1022;
+  --card2:    #0d1530;
+  --cyan:     #00f5ff;
+  --cyan-d:   #00b8c8;
+  --magenta:  #ff00ff;
+  --yellow:   #ffe600;
+  --green:    #00ff88;
+  --orange:   #ff6b00;
+  --purple:   #b44aff;
+  --text:     #e8f4ff;
+  --text2:    #8baab8;
+  --text3:    #4a6070;
+  --border:   rgba(0,245,255,0.15);
+  --shadow:   0 4px 24px rgba(0,0,0,0.5);
+  --shadow-h: 0 8px 48px rgba(0,245,255,0.15);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Exo 2',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:#04060f;}
+::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:3px;}
+
+/* ── ANIMATED BACKGROUND ── */
+.bg-grid {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
+  background-size:50px 50px;
+  animation:gridMove 20s linear infinite;
+}
+@keyframes gridMove {
+  0%  { background-position:0 0; }
+  100%{ background-position:50px 50px; }
+}
+.bg-glow1{
+  position:fixed; width:600px; height:600px;
+  background:radial-gradient(circle, rgba(0,245,255,0.06) 0%, transparent 70%);
+  top:-200px; left:-100px; z-index:0; pointer-events:none;
+  animation:pulse1 8s ease-in-out infinite;
+}
+.bg-glow2{
+  position:fixed; width:500px; height:500px;
+  background:radial-gradient(circle, rgba(255,0,255,0.05) 0%, transparent 70%);
+  bottom:-100px; right:-100px; z-index:0; pointer-events:none;
+  animation:pulse2 10s ease-in-out infinite;
+}
+.bg-glow3{
+  position:fixed; width:400px; height:400px;
+  background:radial-gradient(circle, rgba(180,74,255,0.04) 0%, transparent 70%);
+  top:40%; left:40%; z-index:0; pointer-events:none;
+  animation:pulse1 12s ease-in-out infinite reverse;
+}
+@keyframes pulse1{0%,100%{opacity:.6;transform:scale(1);}50%{opacity:1;transform:scale(1.1);}}
+@keyframes pulse2{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:.9;transform:scale(1.15);}}
+
+/* ── TOP BAR ── */
+.topbar{
+  position:sticky; top:0; z-index:100;
+  padding:.9rem 2rem;
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(4,6,15,0.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(0,245,255,0.2);
+  box-shadow:0 0 30px rgba(0,245,255,0.08);
+}
+.topbar-logo{
+  font-family:'Orbitron',sans-serif;
+  font-size:1.1rem; font-weight:900;
+  letter-spacing:.15em;
+  background:linear-gradient(90deg,var(--cyan),var(--magenta));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.topbar-sub{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.6rem; color:var(--text3);
+  letter-spacing:.2em; margin-top:.2rem;
+}
+.topbar-right{ display:flex; gap:.8rem; align-items:center; }
+.tb-badge{
+  font-family:'Share Tech Mono',monospace; font-size:.65rem;
+  padding:.3rem .8rem; border-radius:4px;
+  letter-spacing:.12em;
+}
+.tb-cyan{ background:rgba(0,245,255,0.1); color:var(--cyan); border:1px solid rgba(0,245,255,0.25); }
+.tb-mag { background:rgba(255,0,255,0.08); color:var(--magenta); border:1px solid rgba(255,0,255,0.2); }
+
+/* ── HERO ── */
+.hero{
+  position:relative; z-index:1;
+  min-height:95vh;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:6rem 2rem 4rem;
+  text-align:center;
+  overflow:hidden;
+}
+/* floating science atoms */
+.atoms{ position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+.atom{
+  position:absolute; border-radius:50%;
+  border:1px solid; opacity:0;
+  animation:atomFloat linear infinite;
+}
+.atom1{width:6px;height:6px;border-color:rgba(0,245,255,.4);left:8%;animation-duration:6s;animation-delay:0s;}
+.atom2{width:4px;height:4px;border-color:rgba(255,0,255,.4);left:20%;animation-duration:8s;animation-delay:-2s;}
+.atom3{width:8px;height:8px;border-color:rgba(255,230,0,.3);left:35%;animation-duration:7s;animation-delay:-4s;}
+.atom4{width:5px;height:5px;border-color:rgba(0,255,136,.4);left:55%;animation-duration:9s;animation-delay:-1s;}
+.atom5{width:7px;height:7px;border-color:rgba(180,74,255,.4);left:70%;animation-duration:6.5s;animation-delay:-3s;}
+.atom6{width:4px;height:4px;border-color:rgba(0,245,255,.5);left:82%;animation-duration:8.5s;animation-delay:-5s;}
+.atom7{width:6px;height:6px;border-color:rgba(255,107,0,.4);left:92%;animation-duration:7.5s;animation-delay:-2.5s;}
+.atom8{width:3px;height:3px;border-color:rgba(255,0,255,.5);left:45%;animation-duration:5.5s;animation-delay:-6s;}
+@keyframes atomFloat{
+  0%  { bottom:-20px; opacity:0; transform:translateX(0) scale(.5); }
+  10% { opacity:.8; }
+  90% { opacity:.5; }
+  100%{ bottom:100%; opacity:0; transform:translateX(30px) scale(1); }
+}
+
+/* card inner glow */
+.chapter-card.cc-chem{
+  background:linear-gradient(145deg,rgba(0,245,255,0.04) 0%,rgba(255,255,255,0.015) 60%);
+}
+.chapter-card.cc-bio{
+  background:linear-gradient(145deg,rgba(0,255,136,0.04) 0%,rgba(255,255,255,0.015) 60%);
+}
+.chapter-card.cc-phys{
+  background:linear-gradient(145deg,rgba(255,0,255,0.04) 0%,rgba(255,255,255,0.015) 60%);
+}
+.chapter-card.soon.cc-chem{
+  background:linear-gradient(145deg,rgba(0,245,255,0.02) 0%,rgba(255,255,255,0.008) 60%);
+}
+.chapter-card.soon.cc-bio{
+  background:linear-gradient(145deg,rgba(0,255,136,0.02) 0%,rgba(255,255,255,0.008) 60%);
+}
+.chapter-card.soon.cc-phys{
+  background:linear-gradient(145deg,rgba(255,0,255,0.02) 0%,rgba(255,255,255,0.008) 60%);
+}
+/* scan line */
+.scanline{
+  position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  opacity:.4; animation:scan 4s linear infinite;
+}
+@keyframes scan{ 0%{top:-2px;} 100%{top:100%;} }
+
+.hero-content{ position:relative; z-index:2; max-width:820px; }
+.hero-eyebrow{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.72rem; letter-spacing:.3em; color:var(--cyan);
+  margin-bottom:1.5rem; display:block;
+  animation:blink 3s step-end infinite;
+}
+@keyframes blink{0%,90%,100%{opacity:1;}91%,99%{opacity:0;}}
+
+.hero h1{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(2.2rem,6vw,5rem);
+  font-weight:900; line-height:1.05;
+  margin-bottom:1rem;
+  letter-spacing:.05em;
+}
+.hero h1 .line1{
+  display:block;
+  color:var(--text);
+  text-shadow:0 0 40px rgba(255,255,255,0.3);
+}
+.hero h1 .line2{
+  display:block;
+  background:linear-gradient(90deg,var(--cyan),var(--magenta),var(--purple));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 0 20px rgba(0,245,255,0.5));
+}
+.hero-desc{
+  font-size:1rem; color:var(--text2); margin-bottom:2.5rem;
+  line-height:1.8; max-width:600px; margin-left:auto; margin-right:auto;
+}
+
+/* stats */
+.hero-stats{ display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:2.5rem; }
+.stat{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(0,245,255,0.15);
+  border-radius:8px; padding:.9rem 1.4rem; text-align:center;
+  position:relative; overflow:hidden;
+  backdrop-filter:blur(10px);
+  transition:border-color .3s;
+}
+.stat:hover{ border-color:var(--cyan); }
+.stat::before{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(0,245,255,0.03),transparent);
+}
+.stat-num{
+  font-family:'Orbitron',monospace;
+  font-size:1.8rem; font-weight:900;
+  display:block; line-height:1;
+  margin-bottom:.3rem;
+}
+.sn-cyan   { color:var(--cyan);    text-shadow:0 0 20px rgba(0,245,255,0.5); }
+.sn-mag    { color:var(--magenta); text-shadow:0 0 20px rgba(255,0,255,0.5); }
+.sn-yellow { color:var(--yellow);  text-shadow:0 0 20px rgba(255,230,0,0.5); }
+.stat-label{ font-size:.7rem; color:var(--text3); letter-spacing:.1em; font-family:'Share Tech Mono',monospace; }
+
+/* pills */
+.subject-pills{ display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap; }
+.pill{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.7rem; padding:.4rem 1rem; border-radius:4px;
+  cursor:pointer; transition:all .2s; letter-spacing:.1em;
+  border:1px solid rgba(255,255,255,0.1); color:var(--text3);
+  background:rgba(255,255,255,0.03);
+}
+.pill:hover{ border-color:var(--cyan); color:var(--cyan); background:rgba(0,245,255,0.05); }
+.pill.active.chem{ background:rgba(0,245,255,0.1); border-color:var(--cyan); color:var(--cyan); }
+.pill.active.bio { background:rgba(0,255,136,0.1); border-color:var(--green); color:var(--green); }
+.pill.active.phys{ background:rgba(255,0,255,0.1); border-color:var(--magenta); color:var(--magenta); }
+.pill.active.all { background:rgba(180,74,255,0.1); border-color:var(--purple); color:var(--purple); }
+
+/* ── MAIN ── */
+.main{ position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:4rem 2rem; }
+
+/* search */
+.search-wrap{ max-width:520px; margin:0 auto 4rem; position:relative; }
+.search-wrap input{
+  width:100%;
+  padding:.9rem 1.2rem .9rem 3.2rem;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(0,245,255,0.2);
+  border-radius:8px; color:var(--text);
+  font-family:'Exo 2',sans-serif; font-size:.95rem;
+  outline:none; transition:all .3s;
+  backdrop-filter:blur(10px);
+}
+.search-wrap input::placeholder{ color:var(--text3); }
+.search-wrap input:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 20px rgba(0,245,255,0.1);
+  background:rgba(0,245,255,0.03);
+}
+.search-icon{
+  position:absolute; left:1.1rem; top:50%;
+  transform:translateY(-50%); color:var(--text3); pointer-events:none;
+}
+
+/* ── SUBJECT BLOCK ── */
+.subject-block{ margin-bottom:4rem; }
+.subject-header{
+  display:flex; align-items:center; gap:1.2rem;
+  margin-bottom:1.8rem; padding:1.3rem 1.8rem;
+  background:rgba(255,255,255,0.02);
+  border-radius:12px;
+  border:1px solid;
+  backdrop-filter:blur(10px);
+  position:relative; overflow:hidden;
+}
+.subject-header::before{
+  content:''; position:absolute;
+  left:0; top:0; bottom:0; width:4px;
+  border-radius:12px 0 0 12px;
+}
+.sh-chem{ border-color:rgba(0,245,255,0.2); }
+.sh-chem::before{ background:linear-gradient(180deg,var(--cyan),var(--cyan-d)); }
+.sh-bio { border-color:rgba(0,255,136,0.2); }
+.sh-bio::before { background:linear-gradient(180deg,var(--green),#00cc66); }
+.sh-phys{ border-color:rgba(255,0,255,0.2); }
+.sh-phys::before{ background:linear-gradient(180deg,var(--magenta),var(--purple)); }
+
+.subj-icon{
+  width:52px; height:52px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.7rem; flex-shrink:0;
+}
+.si-chem{ background:rgba(0,245,255,0.08); border:1px solid rgba(0,245,255,0.2); }
+.si-bio { background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.2); }
+.si-phys{ background:rgba(255,0,255,0.08); border:1px solid rgba(255,0,255,0.2); }
+
+.subj-name{
+  font-family:'Orbitron',sans-serif;
+  font-size:1.1rem; font-weight:700; letter-spacing:.1em;
+}
+.sn-c{ color:var(--cyan); text-shadow:0 0 15px rgba(0,245,255,0.4); }
+.sn-b{ color:var(--green); text-shadow:0 0 15px rgba(0,255,136,0.4); }
+.sn-p{ color:var(--magenta); text-shadow:0 0 15px rgba(255,0,255,0.4); }
+
+.subj-desc{ font-size:.8rem; color:var(--text3); margin-top:.3rem; letter-spacing:.03em; }
+.subj-progress{ margin-left:auto; text-align:right; flex-shrink:0; }
+.progress-bar-wrap{
+  width:130px; height:5px; background:rgba(255,255,255,0.06);
+  border-radius:3px; overflow:hidden; margin-bottom:.4rem;
+}
+.progress-bar{ height:100%; border-radius:3px; transition:width .8s cubic-bezier(.4,0,.2,1); }
+.pb-c{ background:linear-gradient(90deg,var(--cyan),var(--cyan-d)); box-shadow:0 0 8px var(--cyan); }
+.pb-b{ background:linear-gradient(90deg,var(--green),#00cc66); box-shadow:0 0 8px var(--green); }
+.pb-p{ background:linear-gradient(90deg,var(--magenta),var(--purple)); box-shadow:0 0 8px var(--magenta); }
+.progress-label{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.65rem; color:var(--text3);
+}
+
+/* ── CHAPTER GRID ── */
+.chapter-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(265px,1fr));
+  gap:1.2rem;
+}
+
+/* ── CHAPTER CARD ── */
+.chapter-card{
+  background:rgba(255,255,255,0.025);
+  border-radius:14px; padding:1.6rem;
+  display:flex; flex-direction:column; gap:.9rem;
+  text-decoration:none; color:var(--text);
+  transition:transform .3s, box-shadow .3s, border-color .3s, background .3s;
+  position:relative; overflow:hidden;
+  border:1px solid rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
+  min-height:195px;
+}
+/* top glow line */
+.chapter-card::before{
+  content:''; position:absolute;
+  top:0; left:0; right:0; height:2px;
+  border-radius:12px 12px 0 0;
+  opacity:.8;
+  animation:topLinePulse 3s ease-in-out infinite;
+}
+@keyframes topLinePulse{
+  0%,100%{ opacity:.5; }
+  50%{ opacity:1; }
+}
+.cc-chem::before{ background:linear-gradient(90deg,transparent,var(--cyan),transparent); }
+.cc-bio::before { background:linear-gradient(90deg,transparent,var(--green),transparent); }
+.cc-phys::before{ background:linear-gradient(90deg,transparent,var(--magenta),transparent); }
+
+/* hover glow */
+.chapter-card.clickable:hover{
+  transform:translateY(-6px) scale(1.01);
+  background:rgba(255,255,255,0.05);
+}
+.chapter-card.clickable.cc-chem:hover{
+  border-color:rgba(0,245,255,0.4);
+  box-shadow:0 8px 40px rgba(0,245,255,0.15), 0 0 0 1px rgba(0,245,255,0.1);
+}
+.chapter-card.clickable.cc-bio:hover{
+  border-color:rgba(0,255,136,0.4);
+  box-shadow:0 8px 40px rgba(0,255,136,0.15), 0 0 0 1px rgba(0,255,136,0.1);
+}
+.chapter-card.clickable.cc-phys:hover{
+  border-color:rgba(255,0,255,0.4);
+  box-shadow:0 8px 40px rgba(255,0,255,0.15), 0 0 0 1px rgba(255,0,255,0.1);
+}
+
+.chapter-card-top{
+  display:flex; align-items:flex-start;
+  justify-content:space-between; gap:.5rem;
+}
+.chapter-num{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.65rem; font-weight:600; letter-spacing:.12em;
+  padding:.22rem .6rem; border-radius:4px; flex-shrink:0;
+}
+.cn-chem{ background:rgba(0,245,255,0.12); color:#00ffff; border:1px solid rgba(0,245,255,0.35); font-weight:800; text-shadow:0 0 8px rgba(0,245,255,0.6); }
+.cn-bio { background:rgba(0,255,136,0.12); color:#00ff88; border:1px solid rgba(0,255,136,0.35); font-weight:800; text-shadow:0 0 8px rgba(0,255,136,0.6); }
+.cn-phys{ background:rgba(255,0,255,0.12); color:#ff44ff; border:1px solid rgba(255,0,255,0.35); font-weight:800; text-shadow:0 0 8px rgba(255,0,255,0.6); }
+
+.chapter-status{
+  font-size:.63rem; padding:.2rem .6rem; border-radius:4px;
+  font-weight:700; letter-spacing:.08em; flex-shrink:0;
+  font-family:'Share Tech Mono',monospace;
+}
+.status-ready{ background:rgba(0,255,136,0.15); color:var(--green); border:1px solid rgba(0,255,136,0.3); }
+.status-new  { background:rgba(0,245,255,0.15); color:var(--cyan);  border:1px solid rgba(0,245,255,0.3); }
+.status-soon { background:rgba(255,255,255,0.04); color:var(--text3); border:1px solid rgba(255,255,255,0.08); }
+
+.chapter-title{
+  font-size:1.05rem; font-weight:800; line-height:1.45;
+  color:#ffffff;
+  letter-spacing:.02em;
+  text-shadow:0 0 20px rgba(255,255,255,0.4);
+}
+.chapter-topics{ display:flex; flex-wrap:wrap; gap:.35rem; }
+.topic-tag{
+  font-size:.62rem; padding:.18rem .5rem; border-radius:4px; font-weight:600;
+  letter-spacing:.05em; font-family:'Share Tech Mono',monospace;
+}
+.tt-chem{ background:rgba(0,245,255,0.1); color:#00e5f0; border:1px solid rgba(0,245,255,0.22); }
+.tt-bio { background:rgba(0,255,136,0.1); color:#00e87a;       border:1px solid rgba(0,255,136,0.22); }
+.tt-phys{ background:rgba(255,0,255,0.1); color:#cc66ff;  border:1px solid rgba(255,0,255,0.22); }
+
+.chapter-card.clickable:hover .chapter-title{
+  background:linear-gradient(90deg,#ffffff,var(--cyan),#ffffff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  background-size:200% auto;
+  animation:shimmer .8s linear infinite;
+  text-shadow:none;
+}
+.chapter-card.cc-bio.clickable:hover .chapter-title{
+  background:linear-gradient(90deg,#ffffff,var(--green),#ffffff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  background-size:200% auto;
+  animation:shimmer .8s linear infinite;
+}
+.chapter-card.cc-phys.clickable:hover .chapter-title{
+  background:linear-gradient(90deg,#ffffff,var(--magenta),#ffffff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  background-size:200% auto;
+  animation:shimmer .8s linear infinite;
+}
+@keyframes shimmer{
+  0%  { background-position:200% center; }
+  100%{ background-position:-200% center; }
+}
+.chapter-footer{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:auto; padding-top:.7rem;
+  border-top:1px solid rgba(255,255,255,0.05);
+}
+.chapter-meta{ font-size:.7rem; color:var(--text3); font-family:'Share Tech Mono',monospace; }
+.open-btn{
+  display:flex; align-items:center; gap:.3rem;
+  font-size:.72rem; font-weight:700; letter-spacing:.08em;
+  font-family:'Share Tech Mono',monospace;
+  transition:gap .2s, letter-spacing .2s;
+}
+.chapter-card.clickable:hover .open-btn{
+  gap:.6rem;
+  letter-spacing:.14em;
+}
+.ob-chem{ color:var(--cyan); }
+.ob-bio { color:var(--green); }
+.ob-phys{ color:var(--magenta); }
+
+/* coming soon */
+.chapter-card.soon{ opacity:.45; pointer-events:none; }
+.chapter-card.soon:hover{ transform:none; }
+
+/* empty state */
+.empty-state{ text-align:center; padding:4rem; color:var(--text3); display:none; }
+.empty-state .emoji{ font-size:3rem; margin-bottom:1rem; display:block; }
+
+/* ── REVEAL ── */
+.reveal{ opacity:0; transform:translateY(25px); transition:opacity .7s,transform .7s; }
+.reveal.visible{ opacity:1; transform:translateY(0); }
+
+/* ── FOOTER ── */
+.footer{
+  position:relative; z-index:1;
+  background:rgba(4,6,15,0.95);
+  border-top:1px solid rgba(0,245,255,0.1);
+  text-align:center; padding:2.5rem 1rem;
+  font-size:.78rem; line-height:2.2;
+}
+.footer-title{
+  font-family:'Orbitron',sans-serif; font-size:.9rem;
+  letter-spacing:.15em;
+  background:linear-gradient(90deg,var(--cyan),var(--magenta));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text; margin-bottom:.4rem;
+}
+.footer-sub{ color:var(--text3); font-family:'Share Tech Mono',monospace; font-size:.7rem; }
+.footer-links{ display:flex; gap:1.5rem; justify-content:center; margin-top:.8rem; flex-wrap:wrap; }
+.footer-links a{
+  text-decoration:none; font-family:'Share Tech Mono',monospace;
+  font-size:.68rem; letter-spacing:.1em;
+  transition:color .2s;
+}
+.fl-c{ color:var(--cyan); } .fl-c:hover{ color:white; }
+.fl-b{ color:var(--green); } .fl-b:hover{ color:white; }
+.fl-p{ color:var(--magenta); } .fl-p:hover{ color:white; }
+
+@media(max-width:640px){
+  .hero{ padding:5rem 1.2rem 3rem; min-height:auto; }
+  .main{ padding:2.5rem 1rem 3rem; }
+  .topbar{ padding:.8rem 1rem; }
+  .tb-badge{ display:none; }
+  .subject-header{ flex-wrap:wrap; }
+  .subj-progress{ margin-left:0; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow1"></div>
+<div class="bg-glow2"></div>
+<div class="bg-glow3"></div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div>
+    <div class="topbar-logo">⚛ SCIENCE PORTAL</div>
+    <div class="topbar-sub">CBSE · CLASS X · NCERT · REPRINT 2026-27</div>
+  </div>
+  <div class="topbar-right">
+    <div class="tb-badge tb-cyan" id="readyCount">0 CHAPTERS READY</div>
+    <div class="tb-badge tb-mag">NCERT 2026</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="atoms">
+    <div class="atom atom1"></div><div class="atom atom2"></div>
+    <div class="atom atom3"></div><div class="atom atom4"></div>
+    <div class="atom atom5"></div><div class="atom atom6"></div>
+    <div class="atom atom7"></div><div class="atom atom8"></div>
+  </div>
+  <div class="scanline"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">// INITIALISING STUDY SYSTEM...</span>
+    <h1>
+      <span class="line1">CLASS X SCIENCE</span>
+      <span class="line2">STUDY PORTAL</span>
+    </h1>
+    <p class="hero-desc">
+      Interactive lesson notes · Animated diagrams · CBSE board exam Q&amp;A<br>
+      Chapters unlock as they are reviewed. New content added regularly.
+    </p>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num sn-cyan" id="heroReady">0</span>
+        <div class="stat-label">CHAPTERS READY</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num sn-mag">13</span>
+        <div class="stat-label">TOTAL CHAPTERS</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num sn-yellow">3</span>
+        <div class="stat-label">SUBJECTS</div>
+      </div>
+    </div>
+    <div class="subject-pills">
+      <div class="pill active all" onclick="filterSubject('all',this,'all')">⚛ ALL SUBJECTS</div>
+      <div class="pill" onclick="filterSubject('chemistry',this,'chem')">⚗ CHEMISTRY</div>
+      <div class="pill" onclick="filterSubject('biology',this,'bio')">🧬 BIOLOGY</div>
+      <div class="pill" onclick="filterSubject('physics',this,'phys')">⚡ PHYSICS</div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- SEARCH -->
+  <div class="search-wrap reveal">
+    <span class="search-icon">◎</span>
+    <input type="text" id="searchInput"
+           placeholder="SEARCH CHAPTERS OR TOPICS..."
+           oninput="searchChapters()" />
+  </div>
+
+  <div class="empty-state" id="emptyState">
+    <span class="emoji">⚠</span>
+    <p style="font-family:'Share Tech Mono',monospace;color:var(--cyan);">NO RESULTS FOUND</p>
+  </div>
+
+  <!-- ══════════════════════════════════ -->
+  <!--  CHEMISTRY  Ch 1–4                -->
+  <!-- ══════════════════════════════════ -->
+  <div class="subject-block reveal" id="block-chemistry" data-subject="chemistry">
+    <div class="subject-header sh-chem">
+      <div class="subj-icon si-chem">⚗️</div>
+      <div>
+        <div class="subj-name sn-c">CHEMISTRY</div>
+        <div class="subj-desc">CH 01–04 · Chemical reactions · Acids &amp; Bases · Metals · Carbon compounds</div>
+      </div>
+      <div class="subj-progress">
+        <div class="progress-bar-wrap">
+          <div class="progress-bar pb-c" style="width:0%;" id="prog-chemistry"></div>
+        </div>
+        <div class="progress-label" id="lbl-chemistry">0 / 4 CHAPTERS</div>
+      </div>
+    </div>
+    <div class="chapter-grid" id="grid-chemistry">
+
+      <div class="chapter-card soon cc-chem">
+        <div class="chapter-card-top">
+          <div class="chapter-num cn-chem">CH · 01</div>
+          <div class="chapter-status status-soon">⏳ COMING SOON</div>
+        </div>
+        <div class="chapter-title"><span style="margin-right:.4rem;font-size:1.1rem;">⚗️</span>Chemical Reactions and Equations</div>
+        <div class="chapter-topics">
+          <span class="topic-tag tt-chem">Combination</span>
+          <span class="topic-tag tt-chem">Decomposition</span>
+          <span class="topic-tag tt-chem">Displacement</span>
+          <span class="topic-tag tt-chem">Redox</span>
+        </div>
+        <div class="chapter-footer">
+          <span class="chapter-meta">🔐 UNLOCKING SOON</span>
+        </div>
+      </div>
+
+      <a class="chapter-card clickable cc-chem" href="CBSE_Chemistry_Ch2_AcidsBasesSalts.html" target="_blank">
+        <div class="chapter-card-top">
+          <div class="chapter-num cn-chem">CH · 02</div>
+          <div class="chapter-status status-new">★ NEW</div>
+        </div>
+        <div class="chapter-title"><span style="margin-right:.4rem;font-size:1.1rem;">🧪</span>Acids, Bases and Salts</div>
+        <div class="chapter-topics">
+          <span class="topic-tag tt-chem">pH Scale</span>
+          <span class="topic-tag tt-chem">Indicators</span>
+          <span class="topic-tag tt-chem">Neutralisation</span>
+          <span class="topic-tag tt-chem">Salts</span>
+        </div>
+        <div class="chapter-footer">
+          <span class="chapter-meta">🌐 Interactive HTML + Animations</span>
+          <span class="open-btn ob-chem">OPEN ↗</span>
+        </div>
+      </a>
+
+      <div class="chapter-card soon cc-chem">
+        <div class="chapter-card-top">
+          <div class="chapter-num cn-chem">CH · 03</div>
+          <div class="chapter-status status-soon">⏳ COMING SOON</div>
+        </div>
+        <div class="chapter-title"><span style="margin-right:.4rem;font-size:1.1rem;">⚙️</span>Metals and Non-metals</div>
+        <div class="chapter-topics">
+          <span class="topic-tag tt-chem">Reactivity Series</span>
+          <span class="topic-tag tt-chem">Corrosion</span>
+          <span class="topic-tag tt-chem">Alloys</span>
+          <span class="topic-tag tt-chem">Extraction</span>
+        </div>
+        <div class="chapter-footer">
+          <span class="chapter-meta">🔐 UNLOCKING SOON</span>
+        </div>
+      </div>
+
+      <div class="chapter-card soon cc-chem">
+        <div class="chapter-card-top">
+          <div class="chapter-num cn-chem">CH · 04</div>
+          <div class="chapter-status status-soon">⏳ COMING SOON</div>
+        </div>
+        <div class="chapter-title"><span style="margin-right:.4rem;font-size:1.1rem;">💎</span>Carbon and its Compounds</div>
+        <div class="chapter-topics">
+          <span class="topic-tag tt-chem">Covalent Bonds</span>
+          <span class="topic-tag tt-chem">Homologous Series</span>
+          <span class="topic-tag tt-chem">Isomers</span>
+          <span class="topic-tag tt-chem">Soaps &amp; Detergents</span>
+        </div>
+        <div class="chapter-footer">
+          <span class="chapter-meta">🔐 UNLOCKING SOON</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ -->
+  <!--  BIOLOGY  Ch 5–8, 13              -->
+  <!-- ══════════════════════════════════ -->
+  <div class="subject-block reveal" id="block-biology" data-subject="biology">
+    <div class="subject-header sh-bio">
+      <div class="subj-icon si-bio">🧬</div>
+      <div>
+        <div class="subj-name sn-b">BIOLOGY</div>
+        <div class="subj-desc">CH 05–08, 13 · Life processes · Control · Reproduction · Heredity · Environment</div>
+      </div>
+      <div class="subj-progress">
+        <div class="progress-bar-wrap">
+          <div class="progress-bar pb-b" style="width:0%;" id="prog-biology"></div>
+        </div>
+        <div class="progress-label" id="lbl-biology">0 / 5 CHAPTERS</div>
+      </div>
+    </div>
+    <div class="chapter-grid" id="grid-biology">
+
+      <div class="chapter-card soon cc-bio">
+        <div class="chapter-card-top">
+          <div class="chapter-num cn-bio">CH · 05</div>
+          <div class="chapter-status status-soon">⏳ COMING SOON</div>
+        </div>
+        <div class="chapter-title"><span style="margin-right:.4rem;font-size:1.1rem;">🫀</span>Life Processes</div>
+        <div class="chapter-topics">
+          <span class="topic-tag tt-bio">Nutrition</span>
+          <span class="topic-tag tt-bio">Respiration</span>
+          <span class="topic-tag tt-bio">Transportation</span>
+          <span class="topic-tag tt-bio">Excretion</span>
+        </div>
+        <div class="chapter-footer">
+          <span class="chapter-meta">🔐 UNLOCKING SOON</span>
+        </div>
+      </div>
+
+      <div class="chapter-card soon cc-bio">
+        <div class="chapter-card-top">
+          <div class="chapter-num cn-bio">CH · 06</div>
+          <div class="chapter-status status-soon">⏳ COMING SOON</div>
+        </div>
+        <div class="chapter-title"><span style="margin-right:.4rem;font-size:1.1rem;">🧠</span>Control and Coordination</div>
+        <div class="chapter-topics">
+          <span class="topic-tag tt-bio">Nervous System</span>
+          <span class="topic-tag tt-bio">Hormones</span>
+          <span class="topic-tag tt-bio">Reflex Action</span>
+          <span class="topic-tag tt-bio">Endocrine</span>
+        </div>
+        <div class="chapter-footer">
+          <span class="chapter-meta">🔐 UNLOCKING SOON</span>
+        </div>
+      </div>
+
+      <div class="chapter-card soon cc-bio">
+        <div class="chapter-card-top">
+          <div class="chapter-num cn-bio">CH · 07</div>
+          <div class="chapter-status status-soon">⏳ COMING SOON</div>
+        </div>
+        <div class="chapter-title"><span style="margin-right:.4rem;font-size:1.1rem;">🧬</span>How do Organisms Reproduce?</div>
+        <div class="chapter-topics">
+          <span class="topic-tag tt-bio">Asexual</span>
+          <span class="topic-tag tt-bio">Sexual</span>
+          <span class="topic-tag tt-bio">Pollination</span>
+          <span class="topic-tag tt-bio">Human Reproduction</span>
+        </div>
+        <div class="chapter-footer">
+          <span class="chapter-meta">🔐 UNLOCKING SOON</span>
+        </div>
+      </div>
+
+      <div class="chapter-card soon cc-bio">
+        <div class="chapter-card-top">
+          <div class="chapter-num cn-bio">CH · 08</div>
+          <div class="chapter-status status-soon">⏳ COMING SOON</div>
+        </div>
+        <div class="chapter-title"><span style="margin-right:.4rem;font-size:1.1rem;">🔬</span>Heredity</div>
+        <div class="chapter-topics">
+          <span class="topic-tag tt-bio">Mendel's Laws</span>
+          <span class="topic-tag tt-bio">Inherited Traits</span>
+          <span class="topic-tag tt-bio">Sex Determination</span>
+          <span class="topic-tag tt-bio">Evolution</span>
+        </div>
+        <div class="chapter-footer">
+          <span class="chapter-meta">🔐 UNLOCKING SOON</span>
+        </div>
+      </div>
+
+      <div class="chapter-card soon cc-bio">
+        <div class="chapter-card-top">
+          <div class="chapter-num cn-bio">CH · 13</div>
+          <div class="chapter-status status-soon">⏳ COMING SOON</div>
+        </div>
+        <div class="chapter-title"><span style="margin-right:.4rem;font-size:1.1rem;">🌍</span>Our Environment</div>
+        <div class="chapter-topics">
+          <span class="topic-tag tt-bio">Ecosystem</span>
+          <span class="topic-tag tt-bio">Food Chain</span>
+          <span class="topic-tag tt-bio">Ozone Layer</span>
+          <span class="topic-tag tt-bio">Waste Management</span>
+        </div>
+        <div class="chapter-footer">
+          <span class="chapter-meta">🔐 UNLOCKING SOON</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ -->
+  <!--  PHYSICS  Ch 9–12                 -->
+  <!-- ══════════════════════════════════ -->
+  <div class="subject-block reveal" id="block-physics" data-subject="physics">
+    <div class="subject-header sh-phys">
+      <div class="subj-icon si-phys">⚡</div>
+      <div>
+        <div class="subj-name sn-p">PHYSICS</div>
+        <div class="subj-desc">CH 09–12 · Light · Human eye · Electricity · Magnetic effects</div>
+      </div>
+      <div class="subj-progress">
+        <div class="progress-bar-wrap">
+          <div class="progress-bar pb-p" style="width:0%;" id="prog-physics"></div>
+        </div>
+        <div class="progress-label" id="lbl-physics">0 / 4 CHAPTERS</div>
+      </div>
+    </div>
+    <div class="chapter-grid" id="grid-physics">
+
+      <div class="chapter-card soon cc-phys">
+        <div class="chapter-card-top">
+          <div class="chapter-num cn-phys">CH · 09</div>
+          <div class="chapter-status status-soon">⏳ COMING SOON</div>
+        </div>
+        <div class="chapter-title"><span style="margin-right:.4rem;font-size:1.1rem;">💡</span>Light – Reflection and Refraction</div>
+        <div class="chapter-topics">
+          <span class="topic-tag tt-phys">Mirrors</span>
+          <span class="topic-tag tt-phys">Lenses</span>
+          <span class="topic-tag tt-phys">Snell's Law</span>
+          <span class="topic-tag tt-phys">Ray Diagrams</span>
+        </div>
+        <div class="chapter-footer">
+          <span class="chapter-meta">🔐 UNLOCKING SOON</span>
+        </div>
+      </div>
+
+      <div class="chapter-card soon cc-phys">
+        <div class="chapter-card-top">
+          <div class="chapter-num cn-phys">CH · 10</div>
+          <div class="chapter-status status-soon">⏳ COMING SOON</div>
+        </div>
+        <div class="chapter-title"><span style="margin-right:.4rem;font-size:1.1rem;">👁️</span>The Human Eye and the Colourful World</div>
+        <div class="chapter-topics">
+          <span class="topic-tag tt-phys">Eye Structure</span>
+          <span class="topic-tag tt-phys">Defects of Vision</span>
+          <span class="topic-tag tt-phys">Dispersion</span>
+          <span class="topic-tag tt-phys">Rainbow</span>
+        </div>
+        <div class="chapter-footer">
+          <span class="chapter-meta">🔐 UNLOCKING SOON</span>
+        </div>
+      </div>
+
+      <div class="chapter-card soon cc-phys">
+        <div class="chapter-card-top">
+          <div class="chapter-num cn-phys">CH · 11</div>
+          <div class="chapter-status status-soon">⏳ COMING SOON</div>
+        </div>
+        <div class="chapter-title"><span style="margin-right:.4rem;font-size:1.1rem;">⚡</span>Electricity</div>
+        <div class="chapter-topics">
+          <span class="topic-tag tt-phys">Ohm's Law</span>
+          <span class="topic-tag tt-phys">Resistance</span>
+          <span class="topic-tag tt-phys">Series &amp; Parallel</span>
+          <span class="topic-tag tt-phys">Heating Effect</span>
+        </div>
+        <div class="chapter-footer">
+          <span class="chapter-meta">🔐 UNLOCKING SOON</span>
+        </div>
+      </div>
+
+      <div class="chapter-card soon cc-phys">
+        <div class="chapter-card-top">
+          <div class="chapter-num cn-phys">CH · 12</div>
+          <div class="chapter-status status-soon">⏳ COMING SOON</div>
+        </div>
+        <div class="chapter-title"><span style="margin-right:.4rem;font-size:1.1rem;">🧲</span>Magnetic Effects of Electric Current</div>
+        <div class="chapter-topics">
+          <span class="topic-tag tt-phys">Electromagnet</span>
+          <span class="topic-tag tt-phys">Fleming's Rule</span>
+          <span class="topic-tag tt-phys">Electric Motor</span>
+          <span class="topic-tag tt-phys">Generator</span>
+        </div>
+        <div class="chapter-footer">
+          <span class="chapter-meta">🔐 UNLOCKING SOON</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end main -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-title">⚛ CLASS X SCIENCE STUDY PORTAL</div>
+  <div class="footer-sub">CBSE · NCERT · REPRINT 2026-27 · CHAPTERS UNLOCK AS REVIEWED</div>
+  <div class="footer-links">
+    <a href="#block-chemistry" class="fl-c">⚗ CHEMISTRY</a>
+    <a href="#block-biology"   class="fl-b">🧬 BIOLOGY</a>
+    <a href="#block-physics"   class="fl-p">⚡ PHYSICS</a>
+  </div>
+</div>
+
+<script>
+// Scroll reveal
+const obs = new IntersectionObserver(e => {
+  e.forEach(el => { if (el.isIntersecting) el.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Count ready chapters & update progress bars
+function updateCounts() {
+  const ready = document.querySelectorAll('.chapter-card.clickable').length;
+  document.getElementById('heroReady').textContent  = ready;
+  document.getElementById('readyCount').textContent = ready + ' CHAPTERS READY';
+
+  const totals = { chemistry:4, biology:5, physics:4 };
+  ['chemistry','biology','physics'].forEach(subj => {
+    const grid = document.getElementById('grid-' + subj);
+    if (!grid) return;
+    const done  = grid.querySelectorAll('.chapter-card.clickable').length;
+    const total = totals[subj];
+    const pct   = Math.round(done / total * 100);
+    const bar   = document.getElementById('prog-' + subj);
+    const lbl   = document.getElementById('lbl-'  + subj);
+    if (bar) bar.style.width = pct + '%';
+    if (lbl) lbl.textContent = done + ' / ' + total + ' CHAPTERS';
+  });
+}
+updateCounts();
+
+// Subject filter
+function filterSubject(subj, el, cls) {
+  document.querySelectorAll('.pill').forEach(p => {
+    p.classList.remove('active','all','chem','bio','phys');
+  });
+  el.classList.add('active', cls);
+  document.querySelectorAll('.subject-block').forEach(b => {
+    b.style.display = (subj === 'all' || b.dataset.subject === subj) ? '' : 'none';
+  });
+}
+
+// Search
+function searchChapters() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  let anyVisible = false;
+  document.querySelectorAll('.chapter-card').forEach(card => {
+    const match = !q || card.innerText.toLowerCase().includes(q);
+    card.style.display = match ? '' : 'none';
+    if (match) anyVisible = true;
+  });
+  document.querySelectorAll('.subject-block').forEach(block => {
+    const vis = [...block.querySelectorAll('.chapter-card')]
+      .some(c => c.style.display !== 'none');
+    block.style.display = vis ? '' : 'none';
+  });
+  document.getElementById('emptyState').style.display = anyVisible ? 'none' : 'block';
+}
+</script>
+</body>
+</html>
